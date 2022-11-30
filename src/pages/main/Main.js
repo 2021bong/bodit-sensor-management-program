@@ -21,26 +21,34 @@ const Main = () => {
   return (
     <Container>
       <div className='btnContainer'>
-        <button onClick={goGraph}>GO GRAPH</button>
+        <div className='maxContainer'>
+          <button onClick={goGraph}>GRAPH</button>
+          <h2>MAIN</h2>
+        </div>
       </div>
-      <table>
-        <thead>
-          <tr className='tableRow'>
-            <th>#</th>
-            <th>thingName</th>
+      <table className='table'>
+        <thead className='tableHead'>
+          <tr>
+            <th>No.</th>
+            <th>Name</th>
+            <th>Battery</th>
             <th>Connected at</th>
+            <th>Card No.</th>
+            <th>Gateway</th>
             <th>Disconnected at</th>
             <th>Reason</th>
-            <th>Gateway</th>
-            <th>Raw sent</th>
-            <th>Remain</th>
+            <th>FwVer</th>
+            <th>HwVer</th>
+            <th>RawSentCnt</th>
+            <th>Remain Data</th>
             <th>RSSI</th>
           </tr>
         </thead>
-        <tbody>
-          {sensorData?.map((data) => {
+        <tbody className='tableBody'>
+          {sensorData?.map((data, i) => {
             return (
               <tr key={data.thingName}>
+                <td className='id'>{i + 1}</td>
                 <td>{data.thingName}</td>
                 <td>{data.shadow.batLvl}</td>
                 <td>{data.shadow.connAt}</td>
@@ -66,21 +74,91 @@ export default Main;
 
 const Container = styled.div`
   .btnContainer {
-    padding: 20px;
-    text-align: left;
+    width: 100%;
     background-color: ${({ theme }) => theme.mainBlue};
+    padding: 20px 28px;
 
-    button {
-      color: white;
-      margin-right: 1.563rem;
-      border: 2px solid #fff;
-      border-radius: 5px;
-      background-color: ${({ theme }) => theme.mainBlue};
+    .maxContainer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+
+      h2 {
+        color: #fff;
+        font-size: 1.563rem;
+        font-weight: 700;
+      }
+
+      button {
+        color: white;
+        margin-right: 1.563rem;
+        border: 2px solid #fff;
+        border-radius: 5px;
+        background-color: ${({ theme }) => theme.mainBlue};
+        font-weight: 700;
+        font-size: 1rem;
+        &:active {
+          background-color: #fff;
+          color: ${({ theme }) => theme.mainBlue};
+        }
+      }
+    }
+  }
+
+  .table {
+    width: 100%;
+    margin: 0 auto;
+
+    .tableHead {
+      background-color: #eee;
+      color: ${({ theme }) => theme.mainBlue};
+
+      th {
+        padding: 10px;
+        border-top: 1px solid #eee;
+        border-right: 1px solid #fff;
+        font-weight: 700;
+        vertical-align: middle;
+      }
+    }
+
+    .tableBody {
+      width: 100%;
+    }
+
+    .id {
       font-weight: 700;
-      font-size: 1rem;
-      &:active {
-        background-color: #fff;
+    }
+
+    tr {
+      border-bottom: 1px solid #eee;
+
+      &:first-child {
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+      }
+
+      &:last-child {
+        border: none;
+      }
+
+      &:hover {
+        background-color: #eee;
         color: ${({ theme }) => theme.mainBlue};
+        border: 1px solid #fff;
+
+        td {
+          border-right: 1px solid #fff;
+        }
+      }
+
+      td {
+        padding: 10px 5px;
+        border-right: 1px solid #eee;
+        text-align: center;
+        vertical-align: middle;
       }
     }
   }

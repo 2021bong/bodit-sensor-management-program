@@ -25,7 +25,7 @@ export const Wrap = styled.div`
       display: flex;
       justify-content: space-between;
       align-items: center;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
       padding: 0 8px;
       color: #fff;
@@ -51,7 +51,17 @@ export const Wrap = styled.div`
 
         .header-right-container {
           display: flex;
-          padding-right: 15px;
+          align-items: center;
+
+          .now {
+            margin-left: 1.875rem;
+            font-size: 1.563rem;
+            font-weight: 700;
+
+            @media screen and (max-width: ${({ theme }) => theme.surfaceDuo}) {
+              margin-left: 0.5rem;
+            }
+          }
         }
 
         button {
@@ -73,6 +83,7 @@ export const Wrap = styled.div`
             color: ${({ theme }) => theme.mainBlue};
           }
         }
+
         .calendar-box {
           color: #fff;
           font-size: 1.563rem;
@@ -106,19 +117,20 @@ export const Wrap = styled.div`
       flex-direction: column;
       justify-content: center;
       align-items: center;
+
+      &:last-child {
+        margin-bottom: 80px;
+      }
     }
 
     .title {
-      margin-top: 6.25rem;
-      text-align: center;
-
       &:first-child {
         margin-top: 9.375rem;
       }
 
       span {
         display: inline-block;
-        width: 3.125rem;
+        width: 4rem;
         padding: 8px;
         background-color: #1c74e8;
         border-radius: 30px;
@@ -126,8 +138,7 @@ export const Wrap = styled.div`
         font-weight: 700;
         font-size: 1.25rem;
         text-align: center;
-        box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11),
-          0 1px 3px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
       }
     }
 
@@ -137,8 +148,7 @@ export const Wrap = styled.div`
       margin-bottom: 3.125rem;
       padding: 1.875rem;
       border-radius: 1.25rem;
-      box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11),
-        0 1px 3px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
 
       @media screen and (max-width: 900px) {
         width: 600px;
