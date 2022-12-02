@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Main = () => {
-  const [sensorData, setSensorData] = useState();
+  const [, setOriginData] = useState();
+  const [showData, setShowData] = useState();
+  const [dataSort, setDataSort] = useState({});
 
   const navigate = useNavigate('');
   const goGraph = () => {
@@ -14,9 +16,36 @@ const Main = () => {
     fetch('data/dataList.json')
       .then((res) => res.json())
       .then((data) => {
-        setSensorData(data.data);
+        setOriginData(
+          data.data.map((el, i) => {
+            return { name: el.thingName, id: i + 1, ...el.shadow };
+          }),
+        );
+        setShowData(
+          data.data.map((el, i) => {
+            return { name: el.thingName, id: i + 1, ...el.shadow };
+          }),
+        );
+        let obj = {};
+        ['id', 'name', ...Object.keys(data.data[0].shadow)].forEach((el) => {
+          return (obj[el] = false);
+        });
+        setDataSort(obj);
       });
   }, []);
+
+  const handleSortData = (e) => {
+    const id = e.target.id;
+    const selecKey = Object.keys(dataSort).filter((el) => el === id)[0];
+    const newSortData = { [selecKey]: !dataSort[selecKey] };
+    setDataSort((prev) => {
+      return Object.assign(dataSort, newSortData);
+    });
+    const newShowData = [...showData].sort((a, b) => {
+      return newSortData[selecKey] ? b[id] - a[id] : a[id] - b[id];
+    });
+    setShowData(newShowData);
+  };
 
   return (
     <Container>
@@ -29,38 +58,64 @@ const Main = () => {
       <table className='table'>
         <thead className='tableHead'>
           <tr>
-            <th>No.</th>
-            <th>Name</th>
-            <th>Battery</th>
-            <th>Connected at</th>
-            <th>Card No.</th>
-            <th>Gateway</th>
-            <th>Disconnected at</th>
-            <th>Reason</th>
-            <th>FwVer</th>
-            <th>HwVer</th>
-            <th>RawSentCnt</th>
-            <th>Remain Data</th>
-            <th>RSSI</th>
+            <th onClick={handleSortData} id='id'>
+              No.
+            </th>
+            <th onClick={handleSortData} id='name'>
+              Name
+            </th>
+            <th onClick={handleSortData} id='batLvl'>
+              Battery
+            </th>
+            <th onClick={handleSortData} id='connAt'>
+              Connected at
+            </th>
+            <th onClick={handleSortData} id='connCardNum'>
+              Card No.
+            </th>
+            <th onClick={handleSortData} id='connGW'>
+              Gateway
+            </th>
+            <th onClick={handleSortData} id='disconnAt'>
+              Disconnected at
+            </th>
+            <th onClick={handleSortData} id='disconnReason'>
+              Reason
+            </th>
+            <th onClick={handleSortData} id='fwVer'>
+              FwVer
+            </th>
+            <th onClick={handleSortData} id='hwVer'>
+              HwVer
+            </th>
+            <th onClick={handleSortData} id='rawSentCnt'>
+              RawSentCnt
+            </th>
+            <th onClick={handleSortData} id='remainData'>
+              Remain Data
+            </th>
+            <th onClick={handleSortData} id='rssi'>
+              RSSI
+            </th>
           </tr>
         </thead>
         <tbody className='tableBody'>
-          {sensorData?.map((data, i) => {
+          {showData?.map((data) => {
             return (
-              <tr key={data.thingName}>
-                <td className='id'>{i + 1}</td>
-                <td>{data.thingName}</td>
-                <td>{data.shadow.batLvl}</td>
-                <td>{data.shadow.connAt}</td>
-                <td>{data.shadow.connCardNum}</td>
-                <td>{data.shadow.connGW}</td>
-                <td>{data.shadow.disconnAt}</td>
-                <td>{data.shadow.disconnReason}</td>
-                <td>{data.shadow.fwVer}</td>
-                <td>{data.shadow.hwVer}</td>
-                <td>{data.shadow.rawSentCnt}</td>
-                <td>{data.shadow.remainData}</td>
-                <td>{data.shadow.rssi}</td>
+              <tr key={data.name}>
+                <td className='id'>{data.id}</td>
+                <td>{data.name}</td>
+                <td>{data.batLvl}</td>
+                <td>{data.connAt}</td>
+                <td>{data.connCardNum}</td>
+                <td>{data.connGW}</td>
+                <td>{data.disconnAt}</td>
+                <td>{data.disconnReason}</td>
+                <td>{data.fwVer}</td>
+                <td>{data.hwVer}</td>
+                <td>{data.rawSentCnt}</td>
+                <td>{data.remainData}</td>
+                <td>{data.rssi}</td>
               </tr>
             );
           })}
@@ -121,6 +176,7 @@ const Container = styled.div`
         border-right: 1px solid #fff;
         font-weight: 700;
         vertical-align: middle;
+        cursor: pointer;
       }
     }
 
